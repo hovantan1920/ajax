@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+          <div class="col-sm-8">
+            <h1>Jquery Ajax</h1>
+            <form action="">
+                <div class="form-group">
+                    <label for="sel1">Tỉnh thành:</label>
+                    <select class="form-control" id="tinh">
+                    <option>Chọn Tỉnh</option>
+                    </select>
+                    <br>
+                    <label for="sel1">Quận/Huyện:</label>
+                    <select class="form-control" id="quan">
+                    <option>Chọn Quận/Huyện</option>
+                    </select>
+                    <br>
+                    <label for="sel1">Phường/Xã:</label>
+                    <select class="form-control" id="phuong">
+                    <option>Chọn Phường/Xã</option>
+                    </select>
+                    <br>            
+                </div>
+                <button type="button" id="btn" class="btn btn-default">Click</button>
+            </form>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<script>
+    $(function(){
+        $.get("https://thongtindoanhnghiep.co/api/city", function(result){
+            $.each(result.LtsItem, function(index, item){
+                $('#tinh').append("<option value="+item.ID+">"+item.Title+"</option>");
+            });
+        });
+        $('#tinh').on('change', function(){
+            var idTinh = $("#tinh option:selected").val();
+            $("#yourDropdown").text();
+            $.get("https://thongtindoanhnghiep.co/api/city/"+idTinh+"/district", function(result2){
+                $('#quan').empty();
+                $('#quan').append("<option>Chọn Quận/Huyện</option>");
+                $.each(result2, function(index2, item2){
+                    $('#quan').append("<option value="+item2.ID+">"+item2.Title+"</option>");
+                });
+            });
+        });
+        $('#quan').on('change', function(){
+            var idQuan = $("#quan option:selected").val();
+            $("#yourDropdown").text();
+            $.get(" https://thongtindoanhnghiep.co/api/district/"+idQuan+"/ward", function(result3){
+                $('#phuong').empty();
+                $('#phuong').append("<option>Chọn Phường/Xã</option>");
+                $.each(result3, function(index3, item3){
+                    $('#phuong').append("<option value="+item3.ID+">"+item3.Title+"</option>");
+                });
+            });
+        });
+    });
+</script>
+</html>
